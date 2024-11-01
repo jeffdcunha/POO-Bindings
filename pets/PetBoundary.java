@@ -119,7 +119,7 @@ public class PetBoundary extends Application{
             };
 
         TableColumn<Pet, Void> col5 = new TableColumn<>("Ação");
-        col5.setCellFactory(cb);
+        col6.setCellFactory(cb);
 
         tableView.getColumns().addAll(col1, col2, col3, col4, col5);
         tableView.setItems( control.getLista() );

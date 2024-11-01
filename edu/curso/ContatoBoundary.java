@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -36,14 +38,21 @@ public class ContatoBoundary extends Application {
         GridPane paneForm = new GridPane();
 
         Button btnGravar = new Button("Gravar");
-        btnGravar.setOnAction( e -> control.gravar() );
+        btnGravar.setOnAction( e -> { 
+            control.gravar();
+            tableView.refresh();
+        });
         Button btnPesquisar = new Button("Pesquisar");
         btnPesquisar.setOnAction( e -> control.pesquisar() );
+
+        Button btnNovo = new Button("*");
+        btnNovo.setOnAction( e -> control.limparTudo() );
 
         paneForm.add(new Label("Id: "), 0, 0);
         paneForm.add(lblId, 1, 0);
         paneForm.add(new Label("Nome: "), 0, 1);
         paneForm.add(txtNome, 1, 1);
+        paneForm.add(btnNovo, 2, 1);
         paneForm.add(new Label("Email: "), 0, 2);
         paneForm.add(txtEmail, 1, 2);
         paneForm.add(new Label("Telefone: "), 0, 3);
@@ -102,7 +111,19 @@ public class ContatoBoundary extends Application {
                         {
                             btnApagar.setOnAction( e -> {
                                 Contato contato = tableView.getItems().get( getIndex() );
-                                control.excluir( contato ); 
+                                try { 
+                                    control.excluir( contato ); 
+                                } catch (ContatoException err) { 
+                                    new Alert(
+                                        AlertType.ERROR,
+                                        "Erro ao excluir o usuário"
+                                    ).show();
+                                } catch (Exception err) { 
+                                    new Alert(
+                                        AlertType.ERROR,
+                                        "Erro generico"
+                                    ).show();
+                                }
                             });
                         }
 
